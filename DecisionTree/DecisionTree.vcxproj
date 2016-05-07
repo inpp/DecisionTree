@@ -73,6 +73,7 @@
     <ClInclude Include="DT.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="dt_result.txt" />
     <Text Include="dt_test.txt" />
     <Text Include="dt_train.txt" />
   </ItemGroup>

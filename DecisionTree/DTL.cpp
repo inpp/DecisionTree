@@ -4,20 +4,23 @@
 int CHOOSE_ATTRIBUTE(EXAMPLE Exam, vector<int> Att_Num);
 float IG(EXAMPLE Exam, int i, float ia);
 float I(float P, float N);
+float SplitInfo(EXAMPLE Exam, int Att_Num);
 
-
-
+//DTL 함수 구현
 void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
 	Node New_Node;
 	/***********************************************************************************************/
-	if (Exam.size() == 0) { // 남아있는 Example이 없다면 default값 반환
+	// 남아있는 Example이 없다면 default값 반환
+	if (Exam.size() == 0) { 
 		Parent = def;
 		return;
 	}
+
 	/***********************************************************************************************/
+	// Example이 모두 같은 Classification이라면 그 값 반환
 	bool check = true;
 	int classification = -1;
-	for (int i = 0; i < Exam.size(); i++) { // Example이 모두 같은 Classification이라면 그 값 반환
+	for (int i = 0; i < Exam.size(); i++) { 
 		if (classification == -1)
 			classification = Exam[i].buy;
 		else if (classification != Exam[i].buy) {
@@ -30,8 +33,10 @@ void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
 		Parent = New_Node; // classification를 값으로 사용하면 됨.
 		return;
 	}
+
 	/***********************************************************************************************/
-	if (Att_Num.size() == 0) {// Att가 비어있다면 최빈값 반환
+	// Att가 비어있다면 최빈값 반환
+	if (Att_Num.size() == 0) {
 		int P = 0;
 		int N = 0;
 		for (int i = 0; i < Exam.size(); i++) {
@@ -50,7 +55,9 @@ void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
 		return;
 	}
 	/***********************************************************************************************/
-
+	
+	/***********************************************************************************************/
+	//그 외의 상황에서는 best인 ATT를 선택하고, ATT의 value별로 다시 DTL 실행
 	int best = CHOOSE_ATTRIBUTE(Exam, Att_Num);
 
 	Parent.best_att = best;
@@ -87,15 +94,26 @@ int CHOOSE_ATTRIBUTE(EXAMPLE Exam, vector<int> Att_Num) {
 	float ia = I(P, N);
 
 	for (int i = 0; i < Att_Num.size(); i++) {
-		if (IG(Exam, Att_Num[i], ia) > max) {
-			max = IG(Exam, Att_Num[i], ia);
+
+		
+		float Estimate_Att= IG(Exam, Att_Num[i], ia); // ID3 Information gain 
+		Estimate_Att /= SplitInfo(Exam, Att_Num[i]); // For using C4.5 (gain_ratio, SplintInfo), Use this code.
+
+		if (Estimate_Att > max) {
+			max = Estimate_Att;
 			best = Att_Num[i];
 		}
 	}
 
+
+
 	return best;
 }
 
+
+
+/******************************************************************************************************/
+//ID3 Information gain 
 float I(float P, float N) {
 
 	if (P == 0 || N == 0)
@@ -132,3 +150,28 @@ float IG(EXAMPLE Exam, int Att, float ia) {
 
 	return ia - remainder;
 }
+/******************************************************************************************************/
+
+
+/******************************************************************************************************/
+//C4.5 SplitInfo 
+float SplitInfo(EXAMPLE Exam, int Att) {
+	float rtn = 0;
+	vector<float> NumD;
+	float N = (float)Exam.size();
+
+	NumD.resize(AttSize[Att], 0);
+
+	for (int j = 0; j < Exam.size(); j++) {
+		NumD[Exam[j].getAtt(Att)]++;
+	}
+
+	for (int j = 0; j < AttSize[Att]; j++) {
+		if(NumD[j]!=0&&N!=0)
+			rtn -= (NumD[j] / N) * log(NumD[j] / N) / log(2);
+	}
+
+	return rtn;
+}
+
+/******************************************************************************************************/

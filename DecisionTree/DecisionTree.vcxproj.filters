@@ -4,7 +4,7 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{2561fd0a-3f88-4bfe-8699-3b42344a949a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="Header Files">
       <UniqueIdentifier>{fcdc61e1-0115-4d45-9049-221fefa8c941}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -25,10 +25,11 @@
   <ItemGroup>
     <Text Include="dt_train.txt" />
     <Text Include="dt_test.txt" />
+    <Text Include="dt_result.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DT.h">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

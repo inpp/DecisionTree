@@ -12,13 +12,13 @@ bool FileRead(EXAMPLE &exam) {
 		return false;
 	}
 	getline(fin, str);
-
-	/*
-	int age; // <=30 == 0 , 31...40 == 1, >40 == 2
-	int income; // low == 0, medium == 1, high == 2
-	int student; // no == 0, yes == 1
-	int credit_rating; // fair == 0, excellent == 1;
-	*/
+	
+	/**********************************************************
+	*int age; // <=30 == 0 , 31...40 == 1, >40 == 2
+	*int income; // low == 0, medium == 1, high == 2
+	*int student; // no == 0, yes == 1
+	*int credit_rating; // fair == 0, excellent == 1;
+	************************************************************/
 	while (!fin.eof()) {
 		Entity tmp;
 
