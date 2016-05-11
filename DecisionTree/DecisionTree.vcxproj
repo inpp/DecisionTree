@@ -61,7 +61,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <BrowseInformation>true</BrowseInformation>
+    </ClCompile>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Classify.cpp" />
@@ -75,7 +81,9 @@
   <ItemGroup>
     <Text Include="dt_result.txt" />
     <Text Include="dt_test.txt" />
+    <Text Include="dt_test1.txt" />
     <Text Include="dt_train.txt" />
+    <Text Include="dt_train1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

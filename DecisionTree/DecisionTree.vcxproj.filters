@@ -26,6 +26,8 @@
     <Text Include="dt_train.txt" />
     <Text Include="dt_test.txt" />
     <Text Include="dt_result.txt" />
+    <Text Include="dt_train1.txt" />
+    <Text Include="dt_test1.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DT.h">

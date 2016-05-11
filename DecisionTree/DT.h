@@ -5,12 +5,15 @@
 
 using namespace std;
 
-#define Num_Att 4
+#define Num_Att 6
+
+
 
 extern vector<int> AttSize;
 
 class Entity {
 public:
+	/*
 	int age; // <=30 == 0 , 31...40 == 1, >40 == 2
 	int income; // low == 0, medium == 1, high == 2
 	int student; // no == 0, yes == 1
@@ -25,6 +28,15 @@ public:
 		if (Att == 2)
 			return student;
 		return credit;
+	}
+	*/
+
+	vector<int> att;
+	int label;
+	//vector<vector<string > > att_value;
+
+	int getAtt(int Att) {
+		return att[Att];
 	}
 };
 

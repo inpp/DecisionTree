@@ -9,14 +9,15 @@ bool TEST_IN(EXAMPLE &TestSet, const Node &Tree) {
 	ofstream fout;
 	string str;
 
-	fin.open("dt_test.txt");
-	fout.open("dt_result.txt");
+	fin.open("dt_test1.txt");
+	fout.open("dt_result1.txt");
 
 	getline(fin, str);
-	fout << str << "\tClass:buys_computer" << endl;
+	fout << str << "\tcar_evaluation" << endl;
 	while (!fin.eof()) {
 		Entity tmp;
 
+		/*
 		fin >> str; //age
 		if (str[0] == 'e'|| str[0] == 'f')
 			break;
@@ -57,6 +58,88 @@ bool TEST_IN(EXAMPLE &TestSet, const Node &Tree) {
 			fout<< "no" << "\n";
 		else
 			fout << "yes" << "\n";
+
+		TestSet.push_back(tmp);
+		*/
+		tmp.att.resize(Num_Att, 0);
+		fin >> str; // buying
+		if (fin.eof()) // 만약 비어있다면 종료.
+			break;
+		if (str[0] == 'v')
+			tmp.att[0] = 0;
+		else if (str[0] == 'h')
+			tmp.att[0] = 1;
+		else if (str[0] == 'm')
+			tmp.att[0] = 2;
+		else
+			tmp.att[0] = 3;
+		fout << str << "\t";
+
+
+		fin >> str; // maint
+		if (str[0] == 'v')
+			tmp.att[1] = 0;
+		else if (str[0] == 'h')
+			tmp.att[1] = 1;
+		else if (str[0] == 'm')
+			tmp.att[1] = 2;
+		else
+			tmp.att[1] = 3;
+		fout << str << "\t";
+
+
+		fin >> str; // doors
+		if (str[0] == '2')
+			tmp.att[2] = 0;
+		else if (str[0] == '3')
+			tmp.att[2] = 1;
+		else if (str[0] == '4')
+			tmp.att[2] = 2;
+		else
+			tmp.att[2] = 3;
+		fout << str << "\t";
+
+
+		fin >> str; // persons
+		if (str[0] == '2')
+			tmp.att[3] = 0;
+		else if (str[0] == '4')
+			tmp.att[3] = 1;
+		else
+			tmp.att[3] = 2;
+		fout << str << "\t";
+
+
+		fin >> str; // lug_boot
+		if (str[0] == 's')
+			tmp.att[4] = 0;
+		else if (str[0] == 'm')
+			tmp.att[4] = 1;
+		else
+			tmp.att[4] = 2;
+		fout << str << "\t";
+
+
+		fin >> str; // safety
+		if (str[0] == 'l')
+			tmp.att[5] = 0;
+		else if (str[0] == 'm')
+			tmp.att[5] = 1;
+		else
+			tmp.att[5] = 2;
+		fout << str << "\t";
+
+
+		// label는 위의 자료를 토대로 값 부여.
+		tmp.label = Classify(tmp, Tree);
+		if (tmp.label == 0)
+			fout << "unacc" << "\n";
+		else if(tmp.label==1)
+			fout << "acc" << "\n";
+		else if (tmp.label == 2)
+			fout << "good" << "\n";
+		else if (tmp.label == 3)
+			fout << "vgood" << "\n";
 
 		TestSet.push_back(tmp);
 	}

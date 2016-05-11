@@ -1,10 +1,8 @@
 #include "DT.h"
 
-bool FileRead(EXAMPLE &a);
+bool FileRead(EXAMPLE &exam);
 void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def);
 bool TEST_IN(EXAMPLE &TestSet, const Node &Root);
-
-vector<int> AttSize = { 3, 3, 2, 2 };
 
 int main(int agrc, char **argv) {
 	EXAMPLE Exam_Set;
