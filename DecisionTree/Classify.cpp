@@ -4,13 +4,13 @@
 
 int Classify(Entity &Ent, const Node &Root);
 
-bool TEST_IN(EXAMPLE &TestSet, const Node &Tree) {
+bool TEST_IN(EXAMPLE &TestSet, const vector<Node> &Tree, string filename) {
 	ifstream fin;
 	ofstream fout;
 	string str;
 
-	fin.open("dt_test1.txt");
-	fout.open("dt_result1.txt");
+	fin.open(filename);
+	fout.open(filename_result);
 
 	getline(fin, str);
 	fout << str << "\tcar_evaluation" << endl;
@@ -131,7 +131,20 @@ bool TEST_IN(EXAMPLE &TestSet, const Node &Tree) {
 
 
 		// label는 위의 자료를 토대로 값 부여.
-		tmp.label = Classify(tmp, Tree);
+		vector<int> bagging_value;
+		bagging_value.resize(4, 0);
+		for (int i = 0; i < bagging_num; i++) {
+			bagging_value[Classify(tmp, Tree[i])]++;
+		}
+		int mode_value = 0;
+		int max = bagging_value[0];
+		for (int i = 1; i < 4; i++) {
+			if (bagging_value[i] > max) {
+				max = bagging_value[i];
+				mode_value = i;
+			}
+		}
+		tmp.label = mode_value; // 수정 필요,
 		if (tmp.label == 0)
 			fout << "unacc" << "\n";
 		else if(tmp.label==1)

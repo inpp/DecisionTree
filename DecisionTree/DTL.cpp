@@ -128,7 +128,7 @@ int CHOOSE_ATTRIBUTE(EXAMPLE Exam, vector<int> Att_Num) {
 
 		
 		float Estimate_Att= IG(Exam, Att_Num[i], ia); // ID3 Information gain 
-		//Estimate_Att /= SplitInfo(Exam, Att_Num[i]); // For using C4.5 (gain_ratio, SplintInfo), Use this code.
+		Estimate_Att /= SplitInfo(Exam, Att_Num[i]); // For using C4.5 (gain_ratio, SplintInfo), Use this code.
 
 		if (Estimate_Att > max) {
 			max = Estimate_Att;
