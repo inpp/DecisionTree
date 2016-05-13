@@ -1,15 +1,19 @@
 #include "DT.h"
 #include <math.h>
 
-int CHOOSE_ATTRIBUTE(EXAMPLE Exam, vector<int> Att_Num);
-float IG(EXAMPLE Exam, int i, float ia);
-float I(float U, float A, float G, float V);
+int CHOOSE_ATTRIBUTE(EXAMPLE Exam, vector<int> Att_Num, vector<float> Num_Label);
+float IG(EXAMPLE Exam, int i, float ia, vector<float> Num_Label);
+float I(vector<float> Num_Label);
 float SplitInfo(EXAMPLE Exam, int Att_Num);
 float Sub_I(float x, float max);
 
+
+
 //DTL 함수 구현
 void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
+	vector<float> Num_Label;
 	Node New_Node;
+	Num_Label.resize(AttSize[Num_Att], 0);
 	/***********************************************************************************************/
 	/**************************** 남아있는 Example이 없다면 default값 반환 *************************/
 	if (Exam.size() == 0) { 
@@ -36,39 +40,19 @@ void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
 	}
 
 	/***********************************************************************************************/
+	for (int i = 0; i < Exam.size(); i++) {
+		Num_Label[Exam[i].label]++;
+	}
+
 	/******************************** Att가 비어있다면 최빈값 반환 *********************************/
 	if (Att_Num.size() == 0) {
-		int U = 0;
-		int A = 0;
-		int G = 0;
-		int V = 0;
-		for (int i = 0; i < Exam.size(); i++) {
-			if (Exam[i].label == 0)
-				U++;
-			else if (Exam[i].label == 1)
-				A++;
-			else if (Exam[i].label == 2)
-				G++;
-			else
-				V++;
-		}
-
-		int max = U;
-		int value = 0;
-
-		if (A > max) {
-			value = 1;
-			max = A;
-		}
-
-		if (G > max) {
-			value = 2;
-			max = G;
-		}
-
-		if (V > max) {
-			value = 3;
-			max = V;
+		float max = -987654321;
+		int value = -1;
+		for (int i = 0; i < AttSize[Num_Att]; i++) {
+			if (max < Num_Label[i]) {
+				value = i;
+				max = Num_Label[i];
+			}
 		}
 
 		New_Node.IsEnd = value;
@@ -79,7 +63,7 @@ void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
 	
 	/***********************************************************************************************/
 	/**************그 외의 상황에서는 best인 ATT를 선택하고, ATT의 value별로 다시 DTL 실행**********/
-	int best = CHOOSE_ATTRIBUTE(Exam, Att_Num);
+	int best = CHOOSE_ATTRIBUTE(Exam, Att_Num, Num_Label);
 
 	Parent.best_att = best;
 	Parent.Successor.resize(AttSize[best]);
@@ -99,55 +83,37 @@ void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
 	}
 }
 
-int CHOOSE_ATTRIBUTE(EXAMPLE Exam, vector<int> Att_Num) {
+int CHOOSE_ATTRIBUTE(EXAMPLE Exam, vector<int> Att_Num, vector<float> Num_Label) {
 	float max = -987654321;
 	int best = -1;
 
-	float U = 0;
-	float A = 0;
-	float G = 0;
-	float V = 0;
-
-	for (int i = 0; i < Exam.size(); i++) {
-		if (Exam[i].label == 0) {
-			U++;
-		}
-		else if (Exam[i].label == 1) {
-			A++;
-		}
-		else if (Exam[i].label == 2) {
-			G++;
-		}
-		else {
-			V++;
-		}
-	}
-	float ia = I(U, A, G, V);
+	float ia = I(Num_Label);
 
 	for (int i = 0; i < Att_Num.size(); i++) {
-
-		
-		float Estimate_Att= IG(Exam, Att_Num[i], ia); // ID3 Information gain 
+		float Estimate_Att= IG(Exam, Att_Num[i], ia, Num_Label); // ID3 Information gain 
 		Estimate_Att /= SplitInfo(Exam, Att_Num[i]); // For using C4.5 (gain_ratio, SplintInfo), Use this code.
-
 		if (Estimate_Att > max) {
 			max = Estimate_Att;
 			best = Att_Num[i];
 		}
 	}
-
-
-
 	return best;
 }
 
-
-
 /******************************************************************************************************/
 //ID3 Information gain 
-float I(float U, float A, float G, float V) {
-	
-	return Sub_I(U, U + A + G + V) + Sub_I(A, U + A + G + V) + Sub_I(V, U + A + G + V) + Sub_I(G, U + A + G + V);
+float I(vector<float> Num_Label) {
+	float rtn = 0;
+	float sum = 0;
+
+	for (int i = 0; i < Num_Label.size(); i++) {
+		sum += Num_Label[i];
+	}
+	for (int i = 0; i < Num_Label.size(); i++) {
+		rtn += Sub_I(Num_Label[i], sum);
+	}
+
+	return rtn;
 }
 
 float Sub_I(float x, float max) {
@@ -156,44 +122,29 @@ float Sub_I(float x, float max) {
 	return -x / max * log(x / max) / log(2);
 }
 
-float IG(EXAMPLE Exam, int Att, float ia) {
+float IG(EXAMPLE Exam, int Att, float ia, vector<float> Num_Label) {
 	float remainder = 0;
 	float tmp = 0;
-	vector<float> NumU;
-	vector<float> NumA;
-	vector<float> NumG;
-	vector<float> NumV;
-	float U = 0;
-	float A = 0;
-	float G = 0;
-	float V = 0;
 
-	NumU.resize(AttSize[Att], 0);
-	NumA.resize(AttSize[Att], 0);
-	NumG.resize(AttSize[Att], 0);
-	NumV.resize(AttSize[Att], 0);
+	vector<vector<float >> Num_Att_Label;
+	vector<float > tmpfv;
+	tmpfv.resize(AttSize[Num_Att], 0);
+	Num_Att_Label.resize(AttSize[Att], tmpfv);
 
-	for (int j = 0; j < Exam.size(); j++) {
-		if (Exam[j].label == 0) {
-			U++;
-			NumU[ Exam[j].getAtt(Att) ]++;
-		}
-		else if (Exam[j].label == 1) {
-			A++;
-			NumA[Exam[j].getAtt(Att)]++;
-		}
-		else if (Exam[j].label == 2) {
-			G++;
-			NumG[Exam[j].getAtt(Att)]++;
-		}
-		else{
-			V++;
-			NumV[Exam[j].getAtt(Att)]++;
-		}
+	for (int i = 0; i < Exam.size(); i++)
+		Num_Att_Label[Exam[i].getAtt(Att)][Exam[i].label]++;
+
+	float sum = 0;
+	for (int i = 0; i < Num_Label.size(); i++) {
+		sum += Num_Label[i];
 	}
 
-	for (int j = 0; j < AttSize[Att]; j++) {
-		remainder += (NumU[j] + NumA[j] + NumG[j] + NumV[j] ) / (U+A+G+V) * I(NumU[j], NumA[j], NumG[j], NumV[j]);
+	for (int i = 0; i < AttSize[Att]; i++) {
+		float Attsum = 0;
+		for (int j = 0; j < AttSize[Num_Att]; j++) {
+			Attsum += Num_Att_Label[i][j];
+		}
+		remainder += (Attsum) / (sum) * I(Num_Att_Label[i]);
 	}
 
 	return ia - remainder;

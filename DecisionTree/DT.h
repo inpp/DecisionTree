@@ -5,14 +5,16 @@
 
 using namespace std;
 
-#define Num_Att 6
+
 #define bagging_num 1
-#define bagging_factor 100
+#define bagging_factor 0
 #define filename_result "dt_result.txt"
 
 
 extern vector<int> AttSize;
-
+extern vector<vector<string >> AttString;
+extern int Num_Att;
+extern int DEF;
 class Entity {
 public:
 	/*

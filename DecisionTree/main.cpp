@@ -14,7 +14,7 @@ int main(int agrc, char **argv) {
 	EXAMPLE Test_Set;
 	
 	if (!FileRead(Exam_Set, argv[1])) {
-		cout << "입력받은 값이 존재하지 않습니다. 함수를 종료합니다" << endl;
+		cout << "training file이 정상적으로 열리지 않습니다. File을 종료합니다." << endl;
 		return 0;
 	}
 
@@ -23,7 +23,7 @@ int main(int agrc, char **argv) {
 	Root.resize(bagging_num);
 	Node def;
 	
-	def.IsEnd = 1;
+	def.IsEnd = DEF;
 
 	vector<int> Att_Num;
 	for (int i = 0; i < Num_Att; i++)
@@ -40,13 +40,14 @@ int main(int agrc, char **argv) {
 	for (int i = 0; i < bagging_num; i++) {
 		EXAMPLE Sub_Set;
 		for (int j = 0; j < Exam_Set.size(); j++) {
-			if (generator() >= 100 - bagging_factor)
+			if (generator() >= bagging_factor)
 				Sub_Set.push_back(Exam_Set[j]);
 		}
 		DTL(Root[i], Sub_Set, Att_Num, def);
 	}
 	cout << "트리 생성 완료\n";
 	
+
 	cout << "TEST Data 분류 시작\n";
 	if (!TEST_IN(Test_Set, Root, argv[2]))
 		cout << "TEST Data 입력 실패\n";

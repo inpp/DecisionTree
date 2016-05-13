@@ -61,7 +61,8 @@ bool TEST_IN(EXAMPLE &TestSet, const vector<Node> &Tree, string filename) {
 
 		TestSet.push_back(tmp);
 		*/
-		tmp.att.resize(Num_Att, 0);
+
+		/*tmp.att.resize(Num_Att, 0);
 		fin >> str; // buying
 		if (fin.eof()) // 만약 비어있다면 종료.
 			break;
@@ -128,31 +129,43 @@ bool TEST_IN(EXAMPLE &TestSet, const vector<Node> &Tree, string filename) {
 		else
 			tmp.att[5] = 2;
 		fout << str << "\t";
+		*/
 
+
+		for (int i = 0; i < Num_Att; i++) {
+			tmp.att.resize(Num_Att, 0);
+			fin >> str; // buying
+			if (i==0&&fin.eof()) // 만약 비어있다면 종료.
+				break;
+			fout << str << "\t";
+
+			int equal = -1;
+			for (int j = 0; j < AttSize[i]; j++) { // 각각의 속성에 대해 스트링이 일치하면 인덱스 넣어주고 아니라면 속성 하나 추가.
+				if (str == AttString[i][j]) {
+					equal = j;
+					break;
+				}
+			}
+			tmp.att[i] = equal;
+		}
 
 		// label는 위의 자료를 토대로 값 부여.
 		vector<int> bagging_value;
-		bagging_value.resize(4, 0);
+		bagging_value.resize(AttSize[Num_Att], 0);
 		for (int i = 0; i < bagging_num; i++) {
 			bagging_value[Classify(tmp, Tree[i])]++;
 		}
 		int mode_value = 0;
 		int max = bagging_value[0];
-		for (int i = 1; i < 4; i++) {
+		for (int i = 1; i < AttSize[Num_Att]; i++) {
 			if (bagging_value[i] > max) {
 				max = bagging_value[i];
 				mode_value = i;
 			}
 		}
-		tmp.label = mode_value; // 수정 필요,
-		if (tmp.label == 0)
-			fout << "unacc" << "\n";
-		else if(tmp.label==1)
-			fout << "acc" << "\n";
-		else if (tmp.label == 2)
-			fout << "good" << "\n";
-		else if (tmp.label == 3)
-			fout << "vgood" << "\n";
+		
+		tmp.label = mode_value;
+		fout << AttString[Num_Att][tmp.label] << "\n";
 
 		TestSet.push_back(tmp);
 	}
