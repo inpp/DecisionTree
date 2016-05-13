@@ -1,7 +1,7 @@
 #include "DT.h"
-#include <random>
-#include <ctime>
-#include <functional>
+//#include <random>
+//#include <ctime>
+//#include <functional>
 #include <string>
 
 
@@ -30,9 +30,9 @@ int main(int agrc, char **argv) {
 		Att_Num.push_back(i);
 
 	
-	mt19937 engine((unsigned int)time(NULL));                    // MT19937 난수 엔진
+	/*mt19937 engine((unsigned int)time(NULL));                    // MT19937 난수 엔진
 	uniform_int_distribution<int> distribution(1, 100);       // 생성 범위
-	auto generator = bind(distribution, engine);
+	auto generator = bind(distribution, engine);*/
 
 
 	//int bagging_factor;
@@ -40,7 +40,7 @@ int main(int agrc, char **argv) {
 	for (int i = 0; i < bagging_num; i++) {
 		EXAMPLE Sub_Set;
 		for (int j = 0; j < Exam_Set.size(); j++) {
-			if (generator() >= bagging_factor)
+			//if (generator() >= bagging_factor)
 				Sub_Set.push_back(Exam_Set[j]);
 		}
 		DTL(Root[i], Sub_Set, Att_Num, def);

@@ -345,4 +345,3 @@ high	high	4	2	small	high	unacc
 high	high	4	4	small	med	unacc
 med	low	4	more	small	low	unacc
 med	med	4	4	big	med	acc
-good

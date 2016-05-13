@@ -45,21 +45,22 @@ void DTL(Node &Parent, EXAMPLE Exam, vector<int> Att_Num, Node def){
 	}
 
 	/******************************** Att가 비어있다면 최빈값 반환 *********************************/
-	if (Att_Num.size() == 0) {
-		float max = -987654321;
-		int value = -1;
-		for (int i = 0; i < AttSize[Num_Att]; i++) {
-			if (max < Num_Label[i]) {
-				value = i;
-				max = Num_Label[i];
-			}
+	float max = -987654321;
+	int value = -1;
+	for (int i = 0; i < AttSize[Num_Att]; i++) {
+		if (max < Num_Label[i]) {
+			value = i;
+			max = Num_Label[i];
 		}
-
+	}
+	
+	if (Att_Num.size() == 0) {
 		New_Node.IsEnd = value;
-
 		Parent = New_Node; // 최빈값을 반환
 		return;
 	}
+	else
+		def.best_att = value;
 	
 	/***********************************************************************************************/
 	/**************그 외의 상황에서는 best인 ATT를 선택하고, ATT의 value별로 다시 DTL 실행**********/

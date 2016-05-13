@@ -17,23 +17,6 @@ extern int Num_Att;
 extern int DEF;
 class Entity {
 public:
-	/*
-	int age; // <=30 == 0 , 31...40 == 1, >40 == 2
-	int income; // low == 0, medium == 1, high == 2
-	int student; // no == 0, yes == 1
-	int credit; // fair == 0, excellent == 1;
-	int buy; // no == 0, yes == 1;
-
-	int getAtt(int Att) {
-		if (Att == 0)
-			return age;
-		if (Att == 1)
-			return income;
-		if (Att == 2)
-			return student;
-		return credit;
-	}
-	*/
 
 	vector<int> att;
 	int label;
